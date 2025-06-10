@@ -23,6 +23,11 @@ pivot_data = pivot_data.merge(players_images, on='player_name', how='left')
 dates = [col for col in pivot_data.columns if col not in ['player_name', 'player_image_url']]
 dashboard_data = pivot_data[['player_name', 'player_image_url'] + dates]
 
-print(dashboard_data)
+# Check for players without images
+missing_players = dashboard_data[dashboard_data['player_image_url'].isna()]['player_name'].tolist()
+if missing_players:
+    print("There are players without an image", missing_players)
 # Save dashboard data to CSV file
-dashboard_data.to_csv("dashboard.csv" , index=False)
+else:
+    print(dashboard_data)
+    dashboard_data.to_csv("dashboard.csv" , index=False)
