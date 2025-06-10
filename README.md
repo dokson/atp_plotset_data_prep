@@ -1,50 +1,204 @@
-# ATP Tennis Rankings, Results, and Stats
+# ATP Rankings Data Preparation for PlotSet Animated Dashboard
 
-This contains my master ATP player file, historical rankings, results, and match stats.
+## Overview
 
-The player file columns are player_id, first_name, last_name, hand, birth_date, country_code, height (cm).
+This project generates data for a PlotSet animated dashboard that visualizes ATP (Association of Tennis Professionals) player rankings from 2023 onwards. The script processes historical and current ranking data, filters top-10 players, and creates a structured dataset with player information, images, and points progression over time.
 
-The columns for the ranking files are ranking_date, ranking, player_id, ranking_points (where available).
+**Key Features:**
+    - Processes ATP rankings data from 2023 to present
+    - Filters and tracks top-10 players only
+    - Merges player information and profile images
+    - Generates time-series data in pivot table format
+    - Validates data completeness before output
 
-ATP rankings are mostly complete from 1985 to the present. 1982 is missing, and rankings from 1973-1984 are only intermittent.
+## Project Structure
 
-Results and stats: There are up to three files per season: One for tour-level main draw matches (e.g. 'atp_matches_2014.csv'), one for tour-level qualifying and challenger main-draw matches, and one for futures matches.
+```plaintext
+project/
+├── data/
+│   ├── atp_players.csv           # Player information database
+│   ├── atp_rankings_00s.csv      # Historical rankings (2000-2009)
+│   ├── atp_rankings_10s.csv      # Historical rankings (2010-2019)
+│   ├── atp_rankings_20s.csv      # Historical rankings (2020-2024)
+│   ├── atp_rankings_70s.csv      # Historical rankings (1970-1979)
+│   ├── atp_rankings_80s.csv      # Historical rankings (1980-1989)
+│   ├── atp_rankings_90s.csv      # Historical rankings (1990-1999)
+│   ├── atp_rankings_current.csv  # Current rankings (2025+)
+│   └── players_images.csv        # Player image URL mappings
+├── script.py                     # Main data processing script
+├── dashboard.csv                 # Generated output file
+└── README.md                     # This documentation
+```
 
-Most of the columns in the results files are self-explanatory. I've also included a matches_data_dictionary.txt file to spell things out a bit more.
+## Prerequisites
 
-To make the results files easier for more people to use, I've included a fair bit of redundancy with the biographical and ranking files: each row contains several columns of biographical information, along with ranking and ranking points, for both players. Ranking data, as well as age, are as of tourney_date, which is almost always the Monday at or near the beginning of the event.
+### System Requirements
 
-MatchStats are included where I have them. In general, that means 1991-present for tour-level matches, 2008-present for challengers, and 2011-present for tour-level qualifying. The MatchStats columns should be self-explanatory, but they might not be what you're used to seeing; it's all integer totals (e.g. 1st serves in, not 1st serve percentage), from which traditional percentages can be calculated.
+- **Python 3.7+**
+- **Memory**: Minimum 1GB RAM for processing large datasets
 
-There are some tour-level matches with missing stats. Some are missing because ATP doesn't have them. Others I've deleted because they didn't pass some sanity check (loser won 60% of points, or match time was under 20 minutes, etc). Also, Davis Cup matches are included in the tour-level files, but there are no stats for Davis Cup matches until the last few seasons.
+### Required Libraries
 
-## Doubles
+```bash
+pip install pandas
+```
 
-I've added tour-level doubles back to 2000. Filenames follow the convention atp_matches_doubles_yyyy.csv. I may eventually be able to add tour-level doubles from before 2000, as well as lower-level doubles for some years. Most of the columns are the same, though in a different order.
+**Dependencies:**
 
-Doubles updates are temporarily suspended as of late 2020.
+- `pandas` >= 1.3.0
+- `datetime` (built-in Python module)
+
+## Quick Start
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone <repository-url>
+   cd tennis_atp
+   ```
+
+2. **Install dependencies:**
+
+   ```bash
+   pip install -r requirements.txt
+   # or simply: pip install pandas
+   ```
+
+3. **Run the script:**
+
+   ```bash
+   python script.py
+   ```
+
+## Data Files Description
+
+### Input Files
+
+| File | Description | Columns | Format |
+|------|-------------|---------|--------|
+| `atp_players.csv` | Player information database | `player_id`, `name_first`, `name_last`, `hand`, `dob`, `ioc`, `height`, `wikidata_id` | Standard CSV |
+| `atp_rankings_20s.csv` | Historical ATP rankings 2020-2024 | `ranking_date`, `rank`, `player`, `points` | Standard CSV |
+| `atp_rankings_current.csv` | Latest rankings (2025+) | `ranking_date`, `rank`, `player`, `points` | Standard CSV |
+| `players_images.csv` | Player image URL mappings | `player_name`, `player_image_url` | Standard CSV |
+
+### Output File
+
+**`dashboard.csv`** - Final data for PlotSet having structure:
+    - `player_name`: Full player name
+    - `player_image_url`: Profile image URL
+    - Date columns (DD/MM/YYYY): Points for each ranking date
+
+## Script Workflow
+
+### Data Processing Pipeline
+
+1. **📊 Data Loading & Filtering**
+   - Load historical rankings from `atp_rankings_20s.csv`
+   - Convert data types for proper processing
+   - Filter for top-10 players (ranks 1-10) from 2023-01-01 onwards
+   - Remove duplicate entries
+
+2. **🔗 Data Integration**
+   - Load current rankings from `atp_rankings_current.csv`
+   - Concatenate historical and current data
+   - Merge with player information to add full names
+
+3. **📅 Date Formatting**
+   - Convert ranking dates from YYYYMMDD to DD/MM/YYYY format
+   - Ensure proper chronological sorting
+
+4. **📈 Pivot Table Creation**
+   - Transform data into pivot format
+   - Players as rows, dates as columns, points as values
+   - Handle missing data with appropriate data types
+
+5. **🖼️ Image Integration**
+   - Merge player image URLs
+   - Validate image availability for all players
+
+6. **✅ Quality Control & Output**
+   - Check for missing player images
+   - Sort date columns chronologically
+   - Generate final CSV output
+
+## Usage Examples
+
+### Basic Usage
+
+```bash
+python dashboard_data_script.py
+```
+
+### Expected Output
+
+```python
+# If successful:
+[DataFrame preview displayed]
+Dashboard saved to dashboard.csv
+
+# If players missing images:
+There are players without an image ['Player Name 1', 'Player Name 2']
+```
+
+## Data Quality & Validation
+
+### Automatic Checks
+
+- ✅ Date format validation
+- ✅ Rank range verification (1-10 only)
+- ✅ Player image completeness
+- ✅ Duplicate entry removal
+
+## Troubleshooting
+
+### Common Issues
+
+**Issue**: Players without images warning
+
+- **Solution**: Add missing player image URLs to `players_images.csv`
+
+### Data Format Requirements
+
+- atp_rankings_*.csv expected format
+
+```csv
+ranking_date,rank,player,points
+20230101,1,104925,11335
+20230101,2,104542,6490
+```
+
+- players_images.csv expected format:
+
+```csv
+player_name,player_image_url
+Novak Djokovic,https://example.com/djokovic.jpg
+Carlos Alcaraz,https://example.com/alcaraz.jpg
+```
+
+**Output Size**: dashboard.csv typically ~10KB (estimated based on ~20 players and ~50 date columns)
 
 ## Contributing
 
-If you find a bug, please file an issue, and be as specific as possible.
+### Adding New Player Images
 
-Feel free to correct bugs or fill in missing data via pull requests, but be aware that I will not merge PRs. But if that's the most convenient way for you to submit improvements to the data, that's fine; I can work with that.
+1. Add entries to `data/players_images.csv`:
 
-If you'd like to contribute to the project, I post "help wanted" [issues](https://github.com/JeffSackmann/tennis_atp/issues), starting with a plea to fill in biographical data such as date of birth.
+   ```csv
+   player_name,player_image_url
+   John Malkovich,https://example.com/image.jpg
+   ```
 
-Also, I encourage everyone to pitch in to the [Match Charting Project](https://github.com/JeffSackmann/tennis_MatchChartingProject) by charting pro matches. It's not a direct contribution to this repo, but it is a great way to improve the existing state of tennis data.
+### Extending Date Range
 
-## Attention
+- Update `atp_rankings_current.csv` with latest data
+- Modify date filter in script if needed: `>= 20230101`
 
-Please read, understand, and abide by the license below. It seems like a reasonable thing to ask, given the hundreds of hours I've put into amassing and maintaining this dataset. Unfortunately, a few bad apples have violated the license, and when people do that, it makes me considerably less motivated to continue updating.
+### Code Improvements
 
-Also, if you're using this for academic/research purposes (great!), take a minute and cite it properly. It's not that hard, it helps others find a useful resource, and let's face it, you should be doing it anyway.
+- Submit pull requests with clear descriptions
+- Follow existing code style and commenting
+- Add tests for new functionality
 
 ## License
 
-[![Creative Commons License](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
-
-**Tennis databases, files, and algorithms** by [Jeff Sackmann / Tennis Abstract](http://www.tennisabstract.com/) is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).  
-Based on a work at [https://github.com/JeffSackmann](https://github.com/JeffSackmann).
-
-In other words: Attribution is required. Non-commercial use only.
+- This project incorporates data from `atp_rankings_20s.csv` (2020-2024) sourced from <https://github.com/JeffSackmann/tennis_atp>, licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License by Jeff Sackmann / Tennis Abstract. Attribution is required, and use is restricted to non-commercial purposes.
