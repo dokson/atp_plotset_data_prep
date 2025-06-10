@@ -1,18 +1,37 @@
 import pandas as pd
+import os
 from datetime import datetime
 
-rankings_20s = pd.read_csv('data/atp_rankings_20s.csv')
-rankings_20s['ranking_date'] = pd.to_numeric(rankings_20s['ranking_date']).astype('Int64')
-rankings_20s['rank'] = pd.to_numeric(rankings_20s['rank']).astype('Int64')
+# Parameters
+starting_date = 20230101
+top_n = 10
 
-rankings_23_24 = rankings_20s[
-    (rankings_20s['rank'].between(1, 10)) & 
-    (rankings_20s['ranking_date'] >= 20230101)].drop_duplicates()
+# If deeper history is needed, read all rankings files
+if starting_date < 20200101:
+    rankings_files = [f for f in os.listdir('data/') if f.startswith('atp_rankings_') and f.endswith('s.csv')]
+    rankings_history = pd.DataFrame()
 
-rankings_2025 = pd.read_csv('data/atp_rankings_current.csv')
+    # Load and process rankings history files
+    for file in rankings_files:
+        file_path = os.path.join('data/', file)
+        df = pd.read_csv(file_path)
+        rankings_history = pd.concat([rankings_history, df], ignore_index=True)
+else:
+    rankings_history = pd.read_csv('data/atp_rankings_20s.csv')
 
-all_rankings = pd.concat([rankings_23_24, rankings_2025], ignore_index=True)
+# Cast columns to integer for filtering
+rankings_history['ranking_date'] = pd.to_numeric(rankings_history['ranking_date']).astype('Int64')
+rankings_history['rank'] = pd.to_numeric(rankings_history['rank']).astype('Int64')
+# Filter rankings history for top N players and starting date
+rankings_history = rankings_history[
+    (rankings_history['rank'].between(1, top_n)) & 
+    (rankings_history['ranking_date'] >= starting_date)].drop_duplicates()
 
+rankings_current = pd.read_csv('data/atp_rankings_current.csv')
+
+all_rankings = pd.concat([rankings_history, rankings_current], ignore_index=True)
+
+# Load players data to get full names
 players = pd.read_csv('data/atp_players.csv', low_memory=False)
 players['player_name'] = players['name_first'] + ' ' + players['name_last']
 

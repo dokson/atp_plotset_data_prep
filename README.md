@@ -5,7 +5,7 @@
 This project generates data for a PlotSet animated dashboard that visualizes ATP (Association of Tennis Professionals) player rankings from 2023 onwards. The script processes historical and current ranking data, filters top-10 players, and creates a structured dataset with player information, images, and points progression over time.
 
 **Key Features:**
-    - Processes ATP rankings data from 2023 to present
+    - Processes ATP rankings data from 2023 (but you can eventually start from 1970) to 2025
     - Filters and tracks top-10 players only
     - Merges player information and profile images
     - Generates time-series data in pivot table format
@@ -25,8 +25,8 @@ project/
 │   ├── atp_rankings_90s.csv      # Historical rankings (1990-1999)
 │   ├── atp_rankings_current.csv  # Current rankings (2025+)
 │   └── players_images.csv        # Player image URL mappings
-├── dashboard_data_script.py      # Main data preparation script
 ├── dashboard.csv                 # Generated output file
+├── data_preparation.py           # Main data preparation script
 └── README.md                     # This documentation
 ```
 
@@ -53,7 +53,7 @@ pip install pandas
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/dokson/tennis_atp
+   git clone https://github.com/dokson/atp_plotset_data_prep
    cd tennis_atp
    ```
 
@@ -67,7 +67,7 @@ pip install pandas
 3. **Run the script:**
 
    ```bash
-   python script.py
+   python data_preparation.py
    ```
 
 ## Data Files Description
@@ -86,7 +86,7 @@ pip install pandas
 **`dashboard.csv`** - Final data for PlotSet having structure:
     - `player_name`: Full player name
     - `player_image_url`: Profile image URL
-    - Date columns (DD/MM/YYYY): Points for each ranking date
+    - Date columns (DD/MM/YYYY): for each ranking_date
 
 ## Script Workflow
 
@@ -126,7 +126,7 @@ pip install pandas
 ### Basic Usage
 
 ```bash
-python dashboard_data_script.py
+python data_preparation.py
 ```
 
 ### Expected Output
@@ -159,7 +159,7 @@ There are players without an image ['Player Name 1', 'Player Name 2']
 
 ### Data Format Requirements
 
-- atp_rankings_*.csv expected format
+- `atp_rankings_*.csv` expected format
 
 ```csv
 ranking_date,rank,player,points
@@ -167,7 +167,7 @@ ranking_date,rank,player,points
 20230101,2,104542,6490
 ```
 
-- players_images.csv expected format:
+- `players_images.csv` expected format:
 
 ```csv
 player_name,player_image_url
