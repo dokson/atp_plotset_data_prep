@@ -171,8 +171,8 @@ ranking_date,rank,player,points
 
 ```csv
 player_name,player_image_url
-Novak Djokovic,https://example.com/djokovic.jpg
-Carlos Alcaraz,https://example.com/alcaraz.jpg
+Novak Djokovic,https://example.com/djokovic.png
+Carlos Alcaraz,https://example.com/alcaraz.png
 ```
 
 **Output Size**: dashboard.csv typically ~10KB (estimated based on ~20 players and ~50 date columns)
@@ -185,7 +185,7 @@ Carlos Alcaraz,https://example.com/alcaraz.jpg
 
    ```csv
    player_name,player_image_url
-   John Malkovich,https://example.com/image.jpg
+   John Malkovich,https://example.com/image.png
    ```
 
 ### Extending Date Range
