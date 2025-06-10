@@ -201,4 +201,8 @@ Carlos Alcaraz,https://example.com/alcaraz.jpg
 
 ## License
 
-- This project incorporates data from `atp_rankings_20s.csv` (2020-2024) sourced from <https://github.com/JeffSackmann/tennis_atp>, licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License by Jeff Sackmann / Tennis Abstract. Attribution is required, and use is restricted to non-commercial purposes.
+- This project incorporates ATP rankings data (1970-2024) sourced from <https://github.com/JeffSackmann/tennis_atp>, originally licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License by Jeff Sackmann / Tennis Abstract.
+- This project, including the script and generated data (e.g., `dashboard.csv`), is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/) by Alessandro Colace. This license requires:
+  - **Attribution**: You must give appropriate credit to Alessandro Colace and Jeff Sackmann (for the original data), provide a link to the license, and indicate if changes were made.
+  - **NonCommercial**: You may not use this work for commercial purposes.
+  - **ShareAlike**: If you remix, transform, or build upon this work, you must distribute your contributions under the same license.
