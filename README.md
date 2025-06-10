@@ -25,7 +25,7 @@ project/
 │   ├── atp_rankings_90s.csv      # Historical rankings (1990-1999)
 │   ├── atp_rankings_current.csv  # Current rankings (2025+)
 │   └── players_images.csv        # Player image URL mappings
-├── script.py                     # Main data processing script
+├── dashboard_data_script.py      # Main data preparation script
 ├── dashboard.csv                 # Generated output file
 └── README.md                     # This documentation
 ```
@@ -35,7 +35,7 @@ project/
 ### System Requirements
 
 - **Python 3.7+**
-- **Memory**: Minimum 1GB RAM for processing large datasets
+- **Memory**: Minimum 1GB RAM
 
 ### Required Libraries
 
@@ -53,7 +53,7 @@ pip install pandas
 1. **Clone the repository:**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/dokson/tennis_atp
    cd tennis_atp
    ```
 
